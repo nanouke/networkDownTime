@@ -1,8 +1,9 @@
+#!/usr/bin/python
 import sys, os, time, atexit
 
 from signal import SIGTERM
 
-class Deamon:
+class Daemon:
     
     def __init__(self, pidfile, stdin='/dev/null', stdout='/dev/null', stderr='/dev/null'):
         self.stdin = stdin
@@ -101,3 +102,4 @@ class Deamon:
     #==================================================== 
     def run(self):
         # need to be overwrite by the main script
+        return
