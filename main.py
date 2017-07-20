@@ -15,37 +15,22 @@ class NetworkDonwTimeDaemon(Daemon):
                 if localConnection == True:
                     localConnection = False
                     writeLog(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),"Local", "lost")
-                    print('Local network connection lost at : %s' % datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') )
 
-                if verbose:
-                    print("Local network connection : Error")
             else:
                 if localConnection == False:
                     localConnection = True
                     writeLog(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),"Local", "established")
-                    print('Local network connection established at : %s' % datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') )
-
-                if verbose:
-                    print("Local network connection : Ok")
 
             if checkInternet() != True:
 
                 if internetConnection == True:
                     internetConnection = False
-                    print('Internet connection lost at : %s' % datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') )
                     writeLog(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),"Internet", "lost")
-                else:
-                    if verbose:
-                        print("Internet connexion : Error")
 
             else:
                 if internetConnection == False:
                     internetConnection = True
-                    print('Internet connection established at : %s' % datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') )
                     writeLog(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), "Internet" ,"established")
-                else:
-                    if verbose:
-                        print('Internet connection : OK')
 
             time.sleep(1)
 
