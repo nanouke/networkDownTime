@@ -10,8 +10,8 @@ from daemon import Daemon
 class NetworkDonwTimeDaemon(Daemon):
     def run(self):
 
-        localConnection == True
-        internetConnection True
+        localConnection = True
+        internetConnection = True
 
         while True:
 
