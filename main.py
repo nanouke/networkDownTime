@@ -4,43 +4,11 @@
 # internet sur le reseau
 #-------------------------------------------
 
-import sys
-import os
-import getopt
-import datetime
-import urllib2
-import time
+import sys, os ,getopt, datetime, urllib2, time
+from daemon import Daemon
 
-
-def main():
-
-    internetConnection = True
-    localConnection = True
-
-    verbose = False
-
-    try:
-        opts, args = getopt.getopt(sys.argv[1:], "h:v", ["help"])
-    except getopt.GetoptError as err:
-        # print help information and exit:
-        print str(err)  # will print something like "option -a not recognized"
-        usage()
-        sys.exit(2)
-
-    for o, a in opts:
-
-        if o == "-v":
-            verbose = True
-        elif o in ("-h", "--help"):
-            usage()
-            sys.exit()
-        else:
-            assert False
-
-    print("Programme start...")
-    print("Start checking internet connection...")
-
-    try:
+class NetworkDonwTimeDaemon(Daemon):
+    def run(self):
         while True:
 
             if checkLocal() != True:
@@ -81,10 +49,6 @@ def main():
 
             time.sleep(1)
 
-
-    except KeyboardInterrupt:
-        print('Programme end')
-
 #-------------------------------------------------------
 # Eccrie dans le fichier de log
 #-------------------------------------------------------
@@ -92,19 +56,6 @@ def writeLog(messageDate, network ,state):
 
     with open('/var/log/networkDownTime.log', 'a') as f:
         f.write(messageDate + ';' + network + ';'+ state + '\n')
-
-#-------------------------------------------------------
-# Affiche le Help
-#-------------------------------------------------------
-def usage():
-    print('------------------------------------')
-    print('Network down loging system')
-    print('------------------------------')
-    print('Parameters')
-    print('------------------------------------')
-    print('-h   help')
-    print('-v   verbose')
-    print('------------------------------------')
 
 
 #-------------------------------------------------------
@@ -131,4 +82,20 @@ def checkLocal():
 
 
 if __name__ == "__main__":
-    main()
+    daemon = NetworkDonwTimeDaemon('/tmp/NetworkDownTimeDaemon.pid')
+
+    if len(sys.argv) == 2:
+        if 'start' == sys.argv[1]:
+            daemon.start()
+        elif 'stop' == sys.argv[1]:
+            daemon.stop()
+        elif 'restart' == sys.argv[1]:
+            daemon.restart()
+        else:
+            print "Unknown command"
+            sys.exit(2)
+
+        sys.exit(0)
+    else:
+        print "Usage: %s start|stop|restart" % sys.argv[0]
+        sys.exit(2)
